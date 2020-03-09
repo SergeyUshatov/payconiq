@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+}
+
+apply plugin: 'groovy'
+
+group 'payconiq'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.json', name: 'json', version: '20190722'
+    compile group: 'io.rest-assured', name: 'rest-assured', version: '4.2.0'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+    
+    testCompile group: 'org.testng', name: 'testng', version: '7.1.0'
+    testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
+    testCompile group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.0'
+}
