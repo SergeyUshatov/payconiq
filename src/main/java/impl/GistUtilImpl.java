@@ -17,8 +17,6 @@ public class GistUtilImpl implements GistUtil {
     private static final String GIST_DESCRIPTION_PREFIX = "dummy-description-";
 
     private JSONObject gist;
-//    private String description;
-//    private boolean isPublic;
     private JSONObject files;
 
     public GistUtilImpl() {

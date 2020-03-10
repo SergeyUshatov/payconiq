@@ -7,15 +7,21 @@ import logic.ResponseHelper;
 import logic.RestClient;
 
 import io.restassured.http.ContentType;
+import org.apache.log4j.Logger;
 import utils.PropertyLoader;
 
 import static io.restassured.RestAssured.given;
 
 public class RestClientImpl implements RestClient {
+    final static Logger logger = Logger.getLogger(RestClientImpl.class);
     private static final String token = PropertyLoader.loadProperty("personal.token");
 
     @Override
     public ResponseHelper get(RequestHelper requestHelper) {
+        logger.info("Going to send GET request with headers: "
+                + requestHelper.getHeaders()
+                + " and url: "
+                + requestHelper.getUrl()) ;
         RequestSpecification requestSpecification = given().urlEncodingEnabled(true);
         setHeaders(requestHelper, requestSpecification);
 
@@ -32,6 +38,12 @@ public class RestClientImpl implements RestClient {
     public ResponseHelper post(RequestHelper requestHelper) {
         RequestSpecification requestSpecification = given().urlEncodingEnabled(true);
         setHeaders(requestHelper, requestSpecification);
+        logger.info("Going to send POST request with body: "
+                + requestHelper.getBody()
+                + " and headers: "
+                + requestHelper.getHeaders()
+                + " and url: "
+                + requestHelper.getUrl());
 
         Response response = requestSpecification
                 .body(requestHelper.getBody().toString())
@@ -45,6 +57,12 @@ public class RestClientImpl implements RestClient {
 
     @Override
     public ResponseHelper patch(RequestHelper requestHelper) {
+        logger.info("Going to send PATCH request with body: "
+                + requestHelper.getBody()
+                + "  and headers: "
+                + requestHelper.getHeaders()
+                + " and url: "
+                + requestHelper.getUrl());
         RequestSpecification requestSpecification = given().urlEncodingEnabled(true);
         setHeaders(requestHelper, requestSpecification);
 
@@ -63,6 +81,10 @@ public class RestClientImpl implements RestClient {
         RequestSpecification requestSpecification = given().urlEncodingEnabled(true);
         setHeaders(requestHelper, requestSpecification);
 
+        logger.info("Going to send DELETE request with headers:"
+                + requestHelper.getHeaders()
+                + " and url: "
+                + requestHelper.getUrl());
         Response response = requestSpecification
                 .when()
                 .delete(requestHelper.getUrl())

@@ -8,5 +8,4 @@ public interface GistHelper {
     ResponseHelper deleteGist(RequestHelper requestHelper);
     ResponseHelper deleteGist(String id);
     ResponseHelper updateGist(RequestHelper updateRequest);
-    ResponseHelper updateGist(String id);
 }

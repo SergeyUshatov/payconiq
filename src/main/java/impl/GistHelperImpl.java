@@ -7,9 +7,6 @@ import logic.RestClient;
 import org.json.JSONObject;
 import utils.PropertyLoader;
 
-import java.util.List;
-import java.util.Map;
-
 public class GistHelperImpl implements GistHelper {
     private static String BASE_URL = PropertyLoader.loadProperty("baseUrl");
     private static final String GISTS_URL = BASE_URL + "gists";
@@ -51,11 +48,6 @@ public class GistHelperImpl implements GistHelper {
     @Override
     public ResponseHelper updateGist(RequestHelper requestHelper) {
         return restClient.patch(requestHelper);
-    }
-
-    @Override
-    public ResponseHelper updateGist(String id) {
-        return null;
     }
 
     @Override
