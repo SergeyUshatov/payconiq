@@ -17,21 +17,18 @@ public class GetGistTest extends TestBase {
         JSONObject gist = getGistHelper().createGist().asJson();
         String gistId = gist.getString("id");
 
-        RequestHelper getRequest = new RequestHelperImpl().withUrl(GISTS_URL + "/" + gistId);
-        JSONObject retrievedGist = getGistHelper().getGist(getRequest).asJson();
+        JSONObject retrievedGist = getGistHelper().getGist(gistId).asJson();
 
         JSONAssert.assertEquals(gist.toString(), retrievedGist.toString(), compareIgnoringUpdatedAt());
 
-        RequestHelper deleteRequest = new RequestHelperImpl().withUrl(GISTS_URL + "/" + gistId);
-        getGistHelper().deleteGist(deleteRequest);
+        getGistHelper().deleteGist(gistId);
     }
 
     @Test
     public void shouldNotReturnNotExistingGist() {
         String randomId = RandomStringUtils.randomAlphanumeric(32);
 
-        RequestHelper getRequest = new RequestHelperImpl().withUrl(GISTS_URL + "/" + randomId);
-        ResponseHelper retrievedGist = getGistHelper().getGist(getRequest);
+        ResponseHelper retrievedGist = getGistHelper().getGist(randomId);
 
         assertThat(retrievedGist.getStatus(), equalTo(404));
     }
@@ -48,7 +45,6 @@ public class GetGistTest extends TestBase {
         ResponseHelper response = getGistHelper().getGist(unauthorizedGetRequest);
         assertThat(response.getStatus(), equalTo(401));
 
-        RequestHelper deleteRequest = new RequestHelperImpl().withUrl(GISTS_URL + "/" + gistId);
-        getGistHelper().deleteGist(deleteRequest);
+        getGistHelper().deleteGist(gistId);
     }
 }

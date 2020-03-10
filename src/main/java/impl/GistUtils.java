@@ -17,9 +17,9 @@ public class GistUtils {
 
     
     public static JSONObject dummyGist(int filesCount) {
-        String description = GIST_DESCRIPTION_PREFIX + getRandomString();
+        String description = dummyDescription();
         boolean isPublic = new Random().nextBoolean();
-        JSONObject files = getDummyFilesBody(filesCount);
+        JSONObject files = getDummyFiles(filesCount);
 
         JSONObject gist = new JSONObject();
         gist.put(DESCRIPTION, description);
@@ -33,7 +33,7 @@ public class GistUtils {
         return RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_LENGTH);
     }
 
-    public static JSONObject getDummyFilesBody(int filesCount) {
+    public static JSONObject getDummyFiles(int filesCount) {
         JSONObject files = new JSONObject();
         for (int i = 0; i < filesCount; i++) {
             String contentData = FILE_CONTENT_PREFIX + getRandomString();
@@ -44,5 +44,9 @@ public class GistUtils {
             files.put(dummyFileName, content);
         }
         return files;
+    }
+
+    public static String dummyDescription() {
+        return GIST_DESCRIPTION_PREFIX + getRandomString();
     }
 }

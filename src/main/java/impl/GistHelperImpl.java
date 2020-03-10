@@ -27,6 +27,12 @@ public class GistHelperImpl implements GistHelper {
     }
 
     @Override
+    public ResponseHelper getGist(String id) {
+        RequestHelper getRequest = new RequestHelperImpl().withUrl(GISTS_URL + "/" + id);
+        return getGist(getRequest);
+    }
+
+    @Override
     public ResponseHelper getGist(RequestHelper requestHelper) {
         return restClient.get(requestHelper);
     }
@@ -37,8 +43,19 @@ public class GistHelperImpl implements GistHelper {
     }
 
     @Override
+    public ResponseHelper deleteGist(String id) {
+        RequestHelper deleteRequest = new RequestHelperImpl().withUrl(GISTS_URL + "/" + id);
+        return deleteGist(deleteRequest);
+    }
+
+    @Override
     public ResponseHelper updateGist(RequestHelper requestHelper) {
         return restClient.patch(requestHelper);
+    }
+
+    @Override
+    public ResponseHelper updateGist(String id) {
+        return null;
     }
 
     @Override

@@ -13,13 +13,12 @@ public class DeleteGistTest extends TestBase {
     @Test
     public void shouldDeleteGist() {
         JSONObject gist = getGistHelper().createGist().asJson();
-
         String gistId = gist.getString("id");
-        RequestHelper deleteRequest = new RequestHelperImpl().withUrl(GISTS_URL + "/" + gistId);
-        ResponseHelper deleteResponse = getGistHelper().deleteGist(deleteRequest);
+
+        ResponseHelper deleteResponse = getGistHelper().deleteGist(gistId);
 
         assertThat(deleteResponse.getStatus(), equalTo(204));
-        ResponseHelper makeSureResponse = getGistHelper().deleteGist(deleteRequest);
+        ResponseHelper makeSureResponse = getGistHelper().deleteGist(gistId);
         assertThat(makeSureResponse.getStatus(), equalTo(404));
     }
 
@@ -29,8 +28,7 @@ public class DeleteGistTest extends TestBase {
     public void shouldNotDeleteNotExistingGist() {
         String randomId = RandomStringUtils.randomAlphanumeric(32);
 
-        RequestHelper deleteRequest = new RequestHelperImpl().withUrl(GISTS_URL + "/" + randomId);
-        ResponseHelper deleteResponse = getGistHelper().deleteGist(deleteRequest);
+        ResponseHelper deleteResponse = getGistHelper().deleteGist(randomId);
 
         assertThat(deleteResponse.getStatus(), equalTo(404));
     }
@@ -48,7 +46,6 @@ public class DeleteGistTest extends TestBase {
 
         assertThat(deleteResponse.getStatus(), equalTo(401));
 
-        RequestHelper deleteRequest = new RequestHelperImpl().withUrl(GISTS_URL + "/" + gistId);
-        getGistHelper().deleteGist(deleteRequest);
+        getGistHelper().deleteGist(gistId);
     }
 }

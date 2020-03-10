@@ -21,17 +21,16 @@ public class CreateGistTest extends TestBase {
                 .get();
         RequestHelper request = new RequestHelperImpl().withBody(testGistBody);
 
-        JSONObject createdGist = getGistHelper().createGist(request).asJson();
+        ResponseHelper gist = getGistHelper().createGist(request);
+        JSONObject createdGist = gist.asJson();
 
         String gistId = createdGist.getString(ID);
-        RequestHelper getRequest = new RequestHelperImpl().withUrl(GISTS_URL + "/" + gistId);
-        JSONObject retrievedGist = getGistHelper().getGist(getRequest).asJson();
+        JSONObject retrievedGist = getGistHelper().getGist(gistId).asJson();
 
         JSONAssert.assertEquals(testGistBody.toString(), createdGist.toString(), JSONCompareMode.LENIENT);
         JSONAssert.assertEquals(createdGist.toString(), retrievedGist.toString(), compareIgnoringUpdatedAt());
 
-        RequestHelper deleteRequest = new RequestHelperImpl().withUrl(GISTS_URL + "/" + gistId);
-        getGistHelper().deleteGist(deleteRequest);
+        getGistHelper().deleteGist(gistId);
     }
 
     @Test
@@ -44,14 +43,12 @@ public class CreateGistTest extends TestBase {
         JSONObject createdGist = getGistHelper().createGist(request).asJson();
 
         String gistId = createdGist.getString(ID);
-        RequestHelper getRequest = new RequestHelperImpl().withUrl(GISTS_URL + "/" + gistId);
-        JSONObject retrievedGist = getGistHelper().getGist(getRequest).asJson();
+        JSONObject retrievedGist = getGistHelper().getGist(gistId).asJson();
 
         JSONAssert.assertEquals(testGistBody.toString(), createdGist.toString(), JSONCompareMode.LENIENT);
         JSONAssert.assertEquals(createdGist.toString(), retrievedGist.toString(), compareIgnoringUpdatedAt());
 
-        RequestHelper deleteRequest = new RequestHelperImpl().withUrl(GISTS_URL + "/" + gistId);
-        getGistHelper().deleteGist(deleteRequest);
+        getGistHelper().deleteGist(gistId);
     }
 
     @Test
@@ -65,14 +62,12 @@ public class CreateGistTest extends TestBase {
         JSONObject createdGist = getGistHelper().createGist(request).asJson();
 
         String gistId = createdGist.getString(ID);
-        RequestHelper getRequest = new RequestHelperImpl().withUrl(GISTS_URL + "/" + gistId);
-        JSONObject retrievedGist = getGistHelper().getGist(getRequest).asJson();
+        JSONObject retrievedGist = getGistHelper().getGist(gistId).asJson();
 
         JSONAssert.assertEquals(testGistBody.toString(), createdGist.toString(), JSONCompareMode.LENIENT);
         JSONAssert.assertEquals(createdGist.toString(), retrievedGist.toString(), compareIgnoringUpdatedAt());
 
-        RequestHelper deleteRequest = new RequestHelperImpl().withUrl(GISTS_URL + "/" + gistId);
-        getGistHelper().deleteGist(deleteRequest);
+        getGistHelper().deleteGist(gistId);
     }
 
     @Test
@@ -86,14 +81,12 @@ public class CreateGistTest extends TestBase {
         JSONObject createdGist = getGistHelper().createGist(request).asJson();
 
         String gistId = createdGist.getString(ID);
-        RequestHelper getRequest = new RequestHelperImpl().withUrl(GISTS_URL + "/" + gistId);
-        JSONObject retrievedGist = getGistHelper().getGist(getRequest).asJson();
+        JSONObject retrievedGist = getGistHelper().getGist(gistId).asJson();
 
         JSONAssert.assertEquals(testGistBody.toString(), createdGist.toString(), JSONCompareMode.LENIENT);
         JSONAssert.assertEquals(createdGist.toString(), retrievedGist.toString(), compareIgnoringUpdatedAt());
 
-        RequestHelper deleteRequest = new RequestHelperImpl().withUrl(GISTS_URL + "/" + gistId);
-        getGistHelper().deleteGist(deleteRequest);
+        getGistHelper().deleteGist(gistId);
     }
 
     // negative cases
@@ -138,6 +131,62 @@ public class CreateGistTest extends TestBase {
         JSONObject testGistBody = getGistUtil()
                 .get()
                 .put("files", emptyFile);
+
+        RequestHelper request = new RequestHelperImpl().withBody(testGistBody);
+
+        ResponseHelper response = getGistHelper().createGist(request);
+        assertThat(response.getStatus(), equalTo(422));
+    }
+
+    @Test
+    public void shouldNotCreateGistWhenFileHasNoContent() {
+        JSONObject fileWithoutContent = new JSONObject()
+                .put("some_file", new JSONObject());
+        JSONObject testGistBody = getGistUtil()
+                .get()
+                .put("files", fileWithoutContent);
+
+        RequestHelper request = new RequestHelperImpl().withBody(testGistBody);
+
+        ResponseHelper response = getGistHelper().createGist(request);
+        assertThat(response.getStatus(), equalTo(422));
+    }
+
+    @Test
+    public void shouldNotCreateGistWhenFileContentIsNull() {
+        JSONObject fileWithoutContent = new JSONObject()
+                .put("some_file", new JSONObject().put("content", JSONObject.NULL));
+        JSONObject testGistBody = getGistUtil()
+                .get()
+                .put("files", fileWithoutContent);
+
+        RequestHelper request = new RequestHelperImpl().withBody(testGistBody);
+
+        ResponseHelper response = getGistHelper().createGist(request);
+        assertThat(response.getStatus(), equalTo(422));
+    }
+
+    @Test
+    public void shouldNotCreateGistWhenFileContentIsNotString() {
+        JSONObject fileWithoutContent = new JSONObject()
+                .put("some_file", new JSONObject().put("content", 123));
+        JSONObject testGistBody = getGistUtil()
+                .get()
+                .put("files", fileWithoutContent);
+
+        RequestHelper request = new RequestHelperImpl().withBody(testGistBody);
+
+        ResponseHelper response = getGistHelper().createGist(request);
+        assertThat(response.getStatus(), equalTo(422));
+    }
+
+    @Test
+    public void shouldCreateGistWhenFileContentIsEmptyString() {
+        JSONObject fileWithoutContent = new JSONObject()
+                .put("some_file", new JSONObject().put("content", ""));
+        JSONObject testGistBody = getGistUtil()
+                .get()
+                .put("files", fileWithoutContent);
 
         RequestHelper request = new RequestHelperImpl().withBody(testGistBody);
 

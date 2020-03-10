@@ -16,6 +16,14 @@ public class CompareUtils {
         );
     }
 
+    public static Customization updatedAtCustomization(JSONObject gist) {
+        return new Customization("updated_at", (actual, expected) ->{
+            DateTimeFormatter df = DateTimeFormatter.ISO_DATE_TIME;
+            return LocalDateTime.parse(actual.toString(), df).isAfter(LocalDateTime.parse(gist.getString("updated_at"), df));
+        }
+        );
+    }
+
 //    public static CustomComparator compareIgnoringUpdatedAt() {
 //        return new CustomComparator(JSONCompareMode.STRICT,
 //                new Customization("updated_at",
