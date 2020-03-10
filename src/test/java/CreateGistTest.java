@@ -181,7 +181,7 @@ public class CreateGistTest extends TestBase {
     }
 
     @Test
-    public void shouldCreateGistWhenFileContentIsEmptyString() {
+    public void shouldNotCreateGistWhenFileContentIsEmptyString() {
         JSONObject fileWithoutContent = new JSONObject()
                 .put("some_file", new JSONObject().put("content", ""));
         JSONObject testGistBody = getGistUtil()
@@ -189,6 +189,22 @@ public class CreateGistTest extends TestBase {
                 .put("files", fileWithoutContent);
 
         RequestHelper request = new RequestHelperImpl().withBody(testGistBody);
+
+        ResponseHelper response = getGistHelper().createGist(request);
+        assertThat(response.getStatus(), equalTo(422));
+    }
+
+    @Test
+    public void shouldNotCreateGistWithoutBody() {
+
+        ResponseHelper response = getGistHelper().createGist(new RequestHelperImpl());
+        assertThat(response.getStatus(), equalTo(422));
+    }
+
+    @Test
+    public void shouldNotCreateGistWithEmptyBody() {
+        RequestHelper request = new RequestHelperImpl()
+                .withBody(new JSONObject());
 
         ResponseHelper response = getGistHelper().createGist(request);
         assertThat(response.getStatus(), equalTo(422));
