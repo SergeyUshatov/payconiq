@@ -4,7 +4,6 @@ import io.restassured.response.Response;
 import logic.ResponseHelper;
 import org.json.JSONObject;
 
-import java.util.List;
 import java.util.Map;
 
 public class ResponseHelperImpl implements ResponseHelper {
@@ -26,19 +25,8 @@ public class ResponseHelperImpl implements ResponseHelper {
 
     @Override
     public JSONObject asJson() {
-        Map map = asMap();
+        Map map = response.jsonPath().get();
         return new JSONObject(map);
     }
-
-    @Override
-    public Map asMap() {
-        return response.jsonPath().get();
-    }
-
-    @Override
-    public List<Map> asListOfMaps() {
-        return response.jsonPath().get();
-    }
-
 
 }

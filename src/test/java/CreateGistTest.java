@@ -9,10 +9,9 @@ import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static utils.CompareUtils.compareIgnoringUpdatedAt;
+import static utils.Constants.*;
 
 public class CreateGistTest extends TestBase {
-
-    private static final String ID = "id";
 
     @Test
     public void shouldCreateGistWithAllFields() {
@@ -27,8 +26,8 @@ public class CreateGistTest extends TestBase {
         String gistId = createdGist.getString(ID);
         JSONObject retrievedGist = getGistHelper().getGist(gistId).asJson();
 
-        JSONAssert.assertEquals(testGistBody.toString(), createdGist.toString(), JSONCompareMode.LENIENT);
-        JSONAssert.assertEquals(createdGist.toString(), retrievedGist.toString(), compareIgnoringUpdatedAt());
+        JSONAssert.assertEquals(testGistBody.toString(), createdGist.toString(), JSONCompareMode.LENIENT); // check that response has  body as in request
+        JSONAssert.assertEquals(createdGist.toString(), retrievedGist.toString(), compareIgnoringUpdatedAt()); // check that retrieved gist is the same as in POST response
 
         getGistHelper().deleteGist(gistId);
     }
@@ -45,8 +44,8 @@ public class CreateGistTest extends TestBase {
         String gistId = createdGist.getString(ID);
         JSONObject retrievedGist = getGistHelper().getGist(gistId).asJson();
 
-        JSONAssert.assertEquals(testGistBody.toString(), createdGist.toString(), JSONCompareMode.LENIENT);
-        JSONAssert.assertEquals(createdGist.toString(), retrievedGist.toString(), compareIgnoringUpdatedAt());
+        JSONAssert.assertEquals(testGistBody.toString(), createdGist.toString(), JSONCompareMode.LENIENT); // check that response has  body as in request
+        JSONAssert.assertEquals(createdGist.toString(), retrievedGist.toString(), compareIgnoringUpdatedAt()); // check that retrieved gist is the same as in POST response
 
         getGistHelper().deleteGist(gistId);
     }
@@ -64,8 +63,8 @@ public class CreateGistTest extends TestBase {
         String gistId = createdGist.getString(ID);
         JSONObject retrievedGist = getGistHelper().getGist(gistId).asJson();
 
-        JSONAssert.assertEquals(testGistBody.toString(), createdGist.toString(), JSONCompareMode.LENIENT);
-        JSONAssert.assertEquals(createdGist.toString(), retrievedGist.toString(), compareIgnoringUpdatedAt());
+        JSONAssert.assertEquals(testGistBody.toString(), createdGist.toString(), JSONCompareMode.LENIENT); // check that response has  body as in request
+        JSONAssert.assertEquals(createdGist.toString(), retrievedGist.toString(), compareIgnoringUpdatedAt()); // check that retrieved gist is the same as in POST response
 
         getGistHelper().deleteGist(gistId);
     }
@@ -83,8 +82,8 @@ public class CreateGistTest extends TestBase {
         String gistId = createdGist.getString(ID);
         JSONObject retrievedGist = getGistHelper().getGist(gistId).asJson();
 
-        JSONAssert.assertEquals(testGistBody.toString(), createdGist.toString(), JSONCompareMode.LENIENT);
-        JSONAssert.assertEquals(createdGist.toString(), retrievedGist.toString(), compareIgnoringUpdatedAt());
+        JSONAssert.assertEquals(testGistBody.toString(), createdGist.toString(), JSONCompareMode.LENIENT); // check that response has  body as in request
+        JSONAssert.assertEquals(createdGist.toString(), retrievedGist.toString(), compareIgnoringUpdatedAt()); // check that retrieved gist is the same as in POST response
 
         getGistHelper().deleteGist(gistId);
     }
@@ -100,7 +99,8 @@ public class CreateGistTest extends TestBase {
         RequestHelper request = new RequestHelperImpl().withBody(testGistBody);
 
         ResponseHelper response = getGistHelper().createGist(request);
-        assertThat(response.getStatus(), equalTo(422));
+        //checking only stats because I have no access to a DB and have no gist id to check with GET request that a gist was not created
+        assertThat(response.getStatus(), equalTo(UNPROCESSABLE_ENTITY));
     }
 
     @Test
@@ -111,94 +111,101 @@ public class CreateGistTest extends TestBase {
         RequestHelper request = new RequestHelperImpl().withBody(testGistBody);
 
         ResponseHelper response = getGistHelper().createGist(request);
-        assertThat(response.getStatus(), equalTo(422));
+        //checking only stats because I have no access to a DB and have no gist id to check with GET request that a gist was not created
+        assertThat(response.getStatus(), equalTo(UNPROCESSABLE_ENTITY));
     }
 
     @Test
     public void shouldNotCreateGistWhenFilesSectionIsNotAnObject() {
         JSONObject testGistBody = getGistUtil().get();
-        testGistBody.put("files", true);
+        testGistBody.put(FILES, true);
         RequestHelper request = new RequestHelperImpl().withBody(testGistBody);
 
         ResponseHelper response = getGistHelper().createGist(request);
-        assertThat(response.getStatus(), equalTo(422));
+        //checking only stats because I have no access to a DB and have no gist id to check with GET request that a gist was not created
+        assertThat(response.getStatus(), equalTo(UNPROCESSABLE_ENTITY));
     }
 
     @Test
     public void shouldNotCreateGistWhenFilesSectionHasEmptyFile() {
         JSONObject emptyFile = new JSONObject()
-                .put("some_file", JSONObject.NULL);
+                .put(SOME_FILE, JSONObject.NULL);
         JSONObject testGistBody = getGistUtil()
                 .get()
-                .put("files", emptyFile);
+                .put(FILES, emptyFile);
 
         RequestHelper request = new RequestHelperImpl().withBody(testGistBody);
 
         ResponseHelper response = getGistHelper().createGist(request);
-        assertThat(response.getStatus(), equalTo(422));
+        //checking only stats because I have no access to a DB and have no gist id to check with GET request that a gist was not created
+        assertThat(response.getStatus(), equalTo(UNPROCESSABLE_ENTITY));
     }
 
     @Test
     public void shouldNotCreateGistWhenFileHasNoContent() {
         JSONObject fileWithoutContent = new JSONObject()
-                .put("some_file", new JSONObject());
+                .put(SOME_FILE, new JSONObject());
         JSONObject testGistBody = getGistUtil()
                 .get()
-                .put("files", fileWithoutContent);
+                .put(FILES, fileWithoutContent);
 
         RequestHelper request = new RequestHelperImpl().withBody(testGistBody);
 
         ResponseHelper response = getGistHelper().createGist(request);
-        assertThat(response.getStatus(), equalTo(422));
+        //checking only stats because I have no access to a DB and have no gist id to check with GET request that a gist was not created
+        assertThat(response.getStatus(), equalTo(UNPROCESSABLE_ENTITY));
     }
 
     @Test
     public void shouldNotCreateGistWhenFileContentIsNull() {
         JSONObject fileWithoutContent = new JSONObject()
-                .put("some_file", new JSONObject().put("content", JSONObject.NULL));
+                .put(SOME_FILE, new JSONObject().put(CONTENT, JSONObject.NULL));
         JSONObject testGistBody = getGistUtil()
                 .get()
-                .put("files", fileWithoutContent);
+                .put(FILES, fileWithoutContent);
 
         RequestHelper request = new RequestHelperImpl().withBody(testGistBody);
 
         ResponseHelper response = getGistHelper().createGist(request);
-        assertThat(response.getStatus(), equalTo(422));
+        //checking only stats because I have no access to a DB and have no gist id to check with GET request that a gist was not created
+        assertThat(response.getStatus(), equalTo(UNPROCESSABLE_ENTITY));
     }
 
     @Test
     public void shouldNotCreateGistWhenFileContentIsNotString() {
         JSONObject fileWithoutContent = new JSONObject()
-                .put("some_file", new JSONObject().put("content", 123));
+                .put(SOME_FILE, new JSONObject().put(CONTENT, 123));
         JSONObject testGistBody = getGistUtil()
                 .get()
-                .put("files", fileWithoutContent);
+                .put(FILES, fileWithoutContent);
 
         RequestHelper request = new RequestHelperImpl().withBody(testGistBody);
 
         ResponseHelper response = getGistHelper().createGist(request);
-        assertThat(response.getStatus(), equalTo(422));
+        //checking only stats because I have no access to a DB and have no gist id to check with GET request that a gist was not created
+        assertThat(response.getStatus(), equalTo(UNPROCESSABLE_ENTITY));
     }
 
     @Test
     public void shouldNotCreateGistWhenFileContentIsEmptyString() {
         JSONObject fileWithoutContent = new JSONObject()
-                .put("some_file", new JSONObject().put("content", ""));
+                .put(SOME_FILE, new JSONObject().put(CONTENT, ""));
         JSONObject testGistBody = getGistUtil()
                 .get()
-                .put("files", fileWithoutContent);
+                .put(FILES, fileWithoutContent);
 
         RequestHelper request = new RequestHelperImpl().withBody(testGistBody);
 
         ResponseHelper response = getGistHelper().createGist(request);
-        assertThat(response.getStatus(), equalTo(422));
+        //checking only stats because I have no access to a DB and have no gist id to check with GET request that a gist was not created
+        assertThat(response.getStatus(), equalTo(UNPROCESSABLE_ENTITY));
     }
 
     @Test
     public void shouldNotCreateGistWithoutBody() {
-
         ResponseHelper response = getGistHelper().createGist(new RequestHelperImpl());
-        assertThat(response.getStatus(), equalTo(422));
+        //checking only stats because I have no access to a DB and have no gist id to check with GET request that a gist was not created
+        assertThat(response.getStatus(), equalTo(UNPROCESSABLE_ENTITY));
     }
 
     @Test
@@ -207,18 +214,20 @@ public class CreateGistTest extends TestBase {
                 .withBody(new JSONObject());
 
         ResponseHelper response = getGistHelper().createGist(request);
-        assertThat(response.getStatus(), equalTo(422));
+        //checking only stats because I have no access to a DB and have no gist id to check with GET request that a gist was not created
+        assertThat(response.getStatus(), equalTo(UNPROCESSABLE_ENTITY));
     }
 
     @Test
     public void shouldNotCreateGistIfUserIsNotAuthorized() {
         JSONObject testGistBody = getGistUtil().dummyGist(1).get();
         RequestHelper request = new RequestHelperImpl()
-                .withHeader("Authorization", "token invalid")
+                .withHeader(AUTHORIZATION, TOKEN_INVALID)
                 .withBody(testGistBody);
 
         ResponseHelper response = getGistHelper().createGist(request);
-        assertThat(response.getStatus(), equalTo(401));
+        //checking only stats because I have no access to a DB and have no gist id to check with GET request that a gist was not created
+        assertThat(response.getStatus(), equalTo(UNAUTHORIZED));
     }
 
 }

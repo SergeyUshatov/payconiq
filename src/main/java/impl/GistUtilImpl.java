@@ -24,31 +24,10 @@ public class GistUtilImpl implements GistUtil {
     }
 
     @Override
-    public GistUtil dummyGist() {
-
-        String contentData = FILE_CONTENT_PREFIX + getRandomString();
-        String description = GIST_DESCRIPTION_PREFIX + getRandomString();
-        String dummyFileName = FILE_NAME_PREFIX + getRandomString() + ".txt";
-
-        JSONObject content = new JSONObject();
-        content.put(CONTENT, contentData);
-
-        files = new JSONObject();
-        files.put(dummyFileName, content);
-
-        gist = new JSONObject();
-        gist.put(DESCRIPTION, description);
-        gist.put(PUBLIC, true);
-        gist.put(FILES, files);
-        return this;
-    }
-
-    @Override
     public GistUtil dummyGist(int filesCount) {
-        String description = GIST_DESCRIPTION_PREFIX + getRandomString();
+        String description = dummyDescription();
         boolean isPublic = new Random().nextBoolean();
-        files = new JSONObject();
-        setFilesObject(filesCount);
+        files = getDummyFiles(filesCount);
 
         gist = new JSONObject();
         gist.put(DESCRIPTION, description);
@@ -65,20 +44,15 @@ public class GistUtilImpl implements GistUtil {
     }
 
     @Override
-    public GistUtil withIsPublic(boolean isPublic) {
-        gist.put(PUBLIC, isPublic);
-        return this;
-    }
-
-    @Override
     public GistUtil withFiles(int filesCount) {
-        files = new JSONObject();
-        setFilesObject(filesCount);
+        files = getDummyFiles(filesCount);
         gist.put(FILES, files);
         return this;
     }
 
-    private void setFilesObject(int filesCount) {
+    @Override
+    public JSONObject getDummyFiles(int filesCount) {
+        JSONObject files = new JSONObject();
         for (int i = 0; i < filesCount; i++) {
             String contentData = FILE_CONTENT_PREFIX + getRandomString();
             JSONObject content = new JSONObject();
@@ -87,6 +61,7 @@ public class GistUtilImpl implements GistUtil {
             String dummyFileName = FILE_NAME_PREFIX + getRandomString() + ".txt";
             files.put(dummyFileName, content);
         }
+        return files;
     }
 
     @Override
@@ -104,6 +79,11 @@ public class GistUtilImpl implements GistUtil {
     public GistUtil withoutFiles() {
         gist.remove(FILES);
         return this;
+    }
+
+    @Override
+    public String dummyDescription() {
+        return GIST_DESCRIPTION_PREFIX + getRandomString();
     }
 
     private String getRandomString() {

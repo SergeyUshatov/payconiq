@@ -4,9 +4,10 @@ import io.restassured.http.ContentType;
 import logic.RequestHelper;
 import org.json.JSONObject;
 import utils.PropertyLoader;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import static utils.Constants.*;
 
 public final class RequestHelperImpl implements RequestHelper {
     private String url;
@@ -16,9 +17,9 @@ public final class RequestHelperImpl implements RequestHelper {
     public RequestHelperImpl() {
         body = new JSONObject();
         headers = new HashMap<>();
-        headers.put("Content-Type", ContentType.JSON);
-        headers.put("Accept", ContentType.JSON.getAcceptHeader());
-        headers.put("Authorization", "token " + PropertyLoader.loadProperty("personal.token"));
+        headers.put(CONTENT_TYPE, ContentType.JSON);
+        headers.put(ACCEPT, ContentType.JSON.getAcceptHeader());
+        headers.put(AUTHORIZATION, TOKEN + PropertyLoader.loadProperty("personal.token"));
     }
 
     @Override

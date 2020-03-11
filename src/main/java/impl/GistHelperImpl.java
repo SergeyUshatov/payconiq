@@ -52,7 +52,7 @@ public class GistHelperImpl implements GistHelper {
 
     @Override
     public ResponseHelper createGist() {
-        JSONObject dummyBody = GistUtils.dummyGist(3);
+        JSONObject dummyBody = new GistUtilImpl().dummyGist(3).get();
         RequestHelper createRequest = new RequestHelperImpl().withBody(dummyBody);
         return createGist(createRequest);
     }

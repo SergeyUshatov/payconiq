@@ -3,6 +3,9 @@ package utils;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * class allows to load properties from a file
+ */
 public class PropertyLoader {
 
     private static final String PROP_FILE = "/application.properties";

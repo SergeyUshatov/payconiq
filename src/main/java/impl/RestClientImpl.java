@@ -10,6 +10,7 @@ import io.restassured.http.ContentType;
 import org.apache.log4j.Logger;
 import utils.PropertyLoader;
 
+import static utils.Constants.*;
 import static io.restassured.RestAssured.given;
 
 public class RestClientImpl implements RestClient {
@@ -96,9 +97,9 @@ public class RestClientImpl implements RestClient {
 
     private void setHeaders(RequestHelper requestHelper, RequestSpecification req) {
         if (requestHelper == null || requestHelper.getHeaders() == null) {
-            req.header("Content-Type", ContentType.JSON)
-                    .header("Accept", ContentType.JSON.getAcceptHeader())
-                    .header("Authorization", "token " + token);
+            req.header(CONTENT_TYPE, ContentType.JSON)
+                    .header(ACCEPT, ContentType.JSON.getAcceptHeader())
+                    .header(AUTHORIZATION, TOKEN + token);
         } else
             req.headers(requestHelper.getHeaders());
     }

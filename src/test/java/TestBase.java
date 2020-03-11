@@ -7,8 +7,7 @@ import logic.RestClient;
 import utils.PropertyLoader;
 
 public abstract class TestBase {
-    static String BASE_URL = PropertyLoader.loadProperty("baseUrl");
-    static final String GISTS_URL = BASE_URL + "gists";
+    static final String GISTS_URL = PropertyLoader.loadProperty("baseUrl") + "gists";
 
     private RestClient  restClient;
     private GistHelper gistHelper;

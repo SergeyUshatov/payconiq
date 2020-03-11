@@ -9,13 +9,14 @@ import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static utils.CompareUtils.compareIgnoringUpdatedAt;
+import static utils.Constants.*;
 
 public class GetGistTest extends TestBase {
 
     @Test
     public void shouldReturnGist() {
         JSONObject gist = getGistHelper().createGist().asJson();
-        String gistId = gist.getString("id");
+        String gistId = gist.getString(ID);
 
         JSONObject retrievedGist = getGistHelper().getGist(gistId).asJson();
 
@@ -30,20 +31,20 @@ public class GetGistTest extends TestBase {
 
         ResponseHelper retrievedGist = getGistHelper().getGist(randomId);
 
-        assertThat(retrievedGist.getStatus(), equalTo(404));
+        assertThat(retrievedGist.getStatus(), equalTo(NOT_FOUND));
     }
 
     @Test
     public void shouldNotReturnGist() {
         JSONObject gist = getGistHelper().createGist().asJson();
-        String gistId = gist.getString("id");
+        String gistId = gist.getString(ID);
 
         RequestHelper unauthorizedGetRequest = new RequestHelperImpl()
                 .withUrl(GISTS_URL + "/" + gistId)
-                .withHeader("Authorization",  "token invalid");
+                .withHeader(AUTHORIZATION,  TOKEN_INVALID);
 
         ResponseHelper response = getGistHelper().getGist(unauthorizedGetRequest);
-        assertThat(response.getStatus(), equalTo(401));
+        assertThat(response.getStatus(), equalTo(UNAUTHORIZED));
 
         getGistHelper().deleteGist(gistId);
     }
