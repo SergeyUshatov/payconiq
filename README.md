@@ -1,10 +1,26 @@
-To execute test run this command from terminal:
+Before test execution you should add a personal Token to
+
+`src/main/resources/application.properties`
+
+To execute tests run this command from terminal:
 
 `./gradlew clean test allureReport`
 
-Test see report open:
+or
+
+`./gradlew clean test`
+
+and then
+
+`./gradlew allureReport`
+
+Allure Test report is here:
 
 `build/reports/allure-report/index.html`
+
+A simple test report is here:
+
+`build/reports/tests/test/index.html`
 
 Issues:
 
