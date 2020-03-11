@@ -2,6 +2,9 @@ Before test execution you should add a personal Token to
 
 `src/main/resources/application.properties`
 
+You can create a Personal Token here:
+https://github.com/settings/tokens
+
 To execute tests run this command from terminal:
 
 `./gradlew clean test allureReport`
@@ -25,3 +28,6 @@ A simple test report is here:
 Issues:
 
 * Logging to  file is not fully configured
+
+
+[Github]: https://github.com/settings/tokens
