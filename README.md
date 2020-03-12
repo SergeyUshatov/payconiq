@@ -24,10 +24,3 @@ Allure Test report is here:
 A simple test report is here:
 
 `build/reports/tests/test/index.html`
-
-Issues:
-
-* Logging to  file is not fully configured
-
-
-[Github]: https://github.com/settings/tokens
